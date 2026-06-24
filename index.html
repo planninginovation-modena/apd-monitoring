@@ -514,6 +514,20 @@ function downloadResult() {
     const link = document.createElement('a');
     link.download = `APD_${lap}_${tek}_${dateStr}.jpg`;
     link.href = hiddenCanvas.toDataURL('image/jpeg', 0.92);
+    fetch(
+'https://script.google.com/macros/s/AKfycbw8e2fKyIe_jHDsthM3XMayw65puXMM52KK3Cx27FyE1ggj5kRFIcdAm-JKyQ_fzBiJ/exec',
+{
+  method:'POST',
+  headers:{
+    'Content-Type':'application/json'
+  },
+  body:JSON.stringify({
+    wo:lap,
+    teknisi:document.getElementById('teknisi').value,
+    sc:document.getElementById('sc').value,
+    downloadTime:new Date().toLocaleString()
+  })
+});
     link.click();
   }, 50);
 }
