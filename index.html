@@ -65,7 +65,8 @@
   .photo-box .ph-icon { color: var(--gray-400); margin-bottom: 6px; }
   .photo-box .ph-icon svg { width: 28px; height: 28px; }
   .photo-box .ph-label { font-size: 11px; color: var(--gray-400); text-align: center; padding: 0 8px; line-height: 1.4; }
-  .photo-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0; }
+  .photo-box .ph-sub { font-size: 10px; color: var(--gray-400); margin-top: 3px; opacity: 0.7; }
+  /* input file diletakkan di luar photo-box, dipicu via JS */
   .photo-box.has-photo { border-style: solid; border-color: var(--green); background: #fff; }
   .photo-box img.preview { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
   .photo-box .done-badge { position: absolute; top: 7px; right: 7px; width: 22px; height: 22px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
@@ -160,11 +161,12 @@
       <p class="photo-note">Ambil foto sebelum memasuki rumah konsumen. Pastikan masker sudah terpasang dan sepatu pengganti sudah dipakai.</p>
 
       <div class="photo-section-label"><div class="dot"></div>Foto 1 — Masker terpasang</div>
+      <input type="file" id="file-masker" accept="image/*" style="display:none" onchange="handlePhoto(this,'masker')">
       <div class="photo-grid" style="margin-bottom:16px">
-        <div class="photo-box" id="box-masker" onclick="triggerFile('file-masker')">
+        <div class="photo-box" id="box-masker" onclick="document.getElementById('file-masker').click()">
           <div class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
           <div class="ph-label">Ketuk untuk foto</div>
-          <input type="file" id="file-masker" accept="image/*" capture="environment" onchange="handlePhoto(this,'masker')">
+          <div class="ph-sub">Kamera atau galeri</div>
         </div>
         <div class="guide-box">
           <div class="guide-title">Panduan:</div>
@@ -175,11 +177,12 @@
       </div>
 
       <div class="photo-section-label"><div class="dot"></div>Foto 2 — Sepatu pengganti</div>
+      <input type="file" id="file-sepatu" accept="image/*" style="display:none" onchange="handlePhoto(this,'sepatu')">
       <div class="photo-grid">
-        <div class="photo-box" id="box-sepatu" onclick="triggerFile('file-sepatu')">
+        <div class="photo-box" id="box-sepatu" onclick="document.getElementById('file-sepatu').click()">
           <div class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
           <div class="ph-label">Ketuk untuk foto</div>
-          <input type="file" id="file-sepatu" accept="image/*" capture="environment" onchange="handlePhoto(this,'sepatu')">
+          <div class="ph-sub">Kamera atau galeri</div>
         </div>
         <div class="guide-box">
           <div class="guide-title">Panduan:</div>
@@ -327,6 +330,7 @@ setInterval(updateTimestamp, 30000);
 
 // ── FILE TRIGGER ──
 function triggerFile(id) { document.getElementById(id).click(); }
+// (fungsi di atas tetap ada sebagai fallback)
 
 // ── PHOTO HANDLER ──
 function handlePhoto(input, type) {
@@ -349,11 +353,11 @@ function handlePhoto(input, type) {
 function renderPhotoBox(type, src) {
   const box = document.getElementById('box-' + type);
   box.classList.add('has-photo');
+  // Input file TIDAK dimasukkan ke dalam box — sudah ada di luar, dipicu via onclick box
   box.innerHTML = `
     <img class="preview" src="${src}" alt="Foto ${type}">
     <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     <div class="retry-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.7"/></svg> Ganti</div>
-    <input type="file" id="file-${type}" accept="image/*" capture="environment" onchange="handlePhoto(this,'${type}')">
   `;
 }
 
