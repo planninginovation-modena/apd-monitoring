@@ -514,10 +514,12 @@ function downloadResult() {
     const link = document.createElement('a');
     link.download = `APD_${lap}_${tek}_${dateStr}.jpg`;
     link.href = hiddenCanvas.toDataURL('image/jpeg', 0.92);
-    fetch(
+alert("KIRIM DATA KE GOOGLE SHEET");
+fetch(
 'https://script.google.com/macros/s/AKfycbyKLG7Q1JsdDj22fAuH88iLucYroI-6TD74085YiVgP4oHrpoVpacGGRbt_glAX6q4L/exec',
 {
   method:'POST',
+  mode:'no-cors',
   headers:{
     'Content-Type':'application/json'
   },
